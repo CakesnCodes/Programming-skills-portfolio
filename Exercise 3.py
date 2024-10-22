@@ -4,10 +4,9 @@ D={'name': [input ("What is your first name?").capitalize(), input("What is your
    'hometown': input ("What's your hometown? ").capitalize(),
    'age': int(input ("How old are you? (Input as number) "))}
 
-"""
-Create a dictonary with the strings "name", "hometown", and "age" as keys
-and user inputs as the values
-"""
+
+#Create a dictionary with the strings "name", "hometown", and "age" as keys and user inputs as the values
+
 
 #Once all values are inputted, display the following:
 print("-------------------------------")
