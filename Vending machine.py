@@ -49,13 +49,24 @@ All the products (except water) are fictional
 
 act="" #For actions
 skip= "" #For skipping code
+sel= "" #For selecting items
 inv= {"Allowance":15.00}
 #inventory/basket system, Keys are item names, values are amount
 #Allowance is set at 15
 
-def what():#For when the user does an action that does nothing
-    print("-You continue to stare at the machine-")
-    time.sleep(2)
+def stockstat (sel): #For changing stock statuses
+    if quan[sel] <= 3 and quan[sel] != 0: 
+    #^^^If the quantity is less or equal to 3 and not equal to 0
+        status[sel] = "Low in Stock" #Set status as following
+    elif quan[sel] == 0: # if quantity is 0
+        status[sel] = "Out of Stock" #Set status as following
+
+def what(kind): #invalid input message
+    if kind == 1: # when user enters an action that does nothing
+        print("-You continue to stare at the machine-")
+    elif kind == 2: # when user enters invalid input
+        print ("Invalid input")
+    time.sleep(2) #pause
     
 def buy(skip,sel): #For buying products
     cont=True #Variable continue set to true
@@ -64,9 +75,9 @@ def buy(skip,sel): #For buying products
             while True:
                 sel= input("What would you like to purchase? ").capitalize() #ask question
                 if sel not in wares: #if the item selected is not in wares
-                    print("Invalid Input") #print error message
+                    what(2) #print error message
                 elif quan[sel]==0:
-                    print("Sorry! item out of stock")
+                    what(2)
                 else: #otherwise, continue
                     break
         while cont: #loop
@@ -78,16 +89,19 @@ def buy(skip,sel): #For buying products
                     print("You cannot have more than what is in stock")
                 else:
                     print(f"This will cost {(price[sel] * amt)} AED")
-                    if (price[sel] * amt) > inv["Allowance"]: #If the price is more than your allowance
+                    if (price[sel] * amt) > inv["Allowance"]: 
+                    #If the price is more than your allowance
                         print (f"Sorry! You only have {inv['Allowance']} AED of allowance left")                            
                         break #break loop
                     else:
                         while cont: #While 'cont' is True
                             try:
-                                money=float(input("Input the amount you wish to pay with ")) #ask user for amount of money
-                                if money < (price[sel] * amt): # if the money is more than the price of selected product time how many they want to buy
+                                money=float(input("Input the amount you wish to pay with ")) 
+                                #ask user for amount of money
+                                if money < (price[sel] * amt): 
+                                #^^^if the money is more than the price times amount
                                     print("Insufficient Funds")
-                                elif money > inv["Allowance"]: # If money is higher than allowance
+                                elif money > inv["Allowance"]: #If money is higher than allowance
                                     print(f"-You only have {inv['Allowance']} AED of allowance-")
                                 else: #if not
                                     quan[sel] -= amt #Subtract amount purchased from stock
@@ -95,19 +109,23 @@ def buy(skip,sel): #For buying products
                                     cont = False #set 'cont' to false
                                     break #end loop
                             except ValueError:
-                                what()                                                  
+                                what(1)                                                  
             except ValueError: #if the code fails, print following
-                print("Invalid Input")                   
+                what(2) 
+            return sel
     except ValueError: #ditto ^
-        print("Invalid Input")
+        what(2)
 
 def info(sel): #For describing products
-    print(f"Item: {wares[sel]} | {desc[sel]}") #Displays name of product and description
+    print(f"Item: {wares[sel]} | {desc[sel]}") 
+    #^^^ Displays name of product (key) and description (value)
     print(" ")    
         
-def change (amt,sel,money): #For producing change and changing status
-    inv["Allowance"] -= (price[sel] * amt) #Lowers allowance by item cost times the amount
-    change = money - (price[sel] * amt) #Change is the money minus the item cost times the amount
+def change (amt,sel,money): #For producing change
+    inv["Allowance"] -= (price[sel] * amt) 
+    #Lowers allowance by item cost times the amount
+    change = money - (price[sel] * amt) 
+    #Change is the money minus the item cost times the amount
     change = round(change,2) #rounds the change by 2 decimal points
     print("Processing payment...")
     time.sleep(2) #pause for effect
@@ -116,10 +134,6 @@ def change (amt,sel,money): #For producing change and changing status
         inv[wares[sel]] += amt #updates amount of item
     else: #If not
         inv[wares[sel]] = amt #adds item and amount
-    if quan[sel] <= 3 and quan[sel] != 0: #If the quantity is less or equal to 3 and not equal to 0
-        status[sel] = "Low in Stock" #Set status as following
-    elif quan[sel] == 0: # if quantity is 0
-        status[sel] = "Out of Stock" #Set status as following
     print(f'-You have {inv["Allowance"]} left in your allowance-') #prints remaining allowance
   
 def display (): #Prints vending machine display
@@ -155,7 +169,7 @@ while act !=4: #Loop when act does not equal to 4
             print("-You decided to approach the machine-")
             cont=input("Press enter to continue ")
             display() #prints vending machine display
-            while act != 4:
+            while act != 4: #loop while 4 is not selected
                 try:
                     act=int(input("""
      What would you like to do?
@@ -165,21 +179,23 @@ while act !=4: #Loop when act does not equal to 4
          [3] Check inventory
          [4] Leave Machine
                           
-                                 """)) #provides selection of actions
+                                 """)) #provides main menu
                             
                     if act == 1: #User chooses to purchase
-                        if skip != "Y":   
-                            buy("N","")
+                        if act != 'Y': #when transfering from act 2 
+                            buy("N","") #Call buy function
+                            stockstat(sel)
                         while True:
                             add = input("Would you like to purchase another product? [Y/N] ").capitalize()
-                            if add == "Y":
-                                display()
-                                buy("N","")
-                            elif add == "N":
-                                display()
-                                break
-                            else:
-                                what()
+                            #^^^ requests user if they want to buy another item
+                            if add == "Y": # if they want to buy
+                                display() #prints display
+                                buy("N","") # Call buy function
+                            elif add == "N": # if not
+                                display() #print display
+                                break #return to main menu
+                            else:# invalid action
+                                what(1)
                     elif act == 2: #User chooses to examine
                         while act == 2:
                             ndesc = "" # For additional descriptions
@@ -187,58 +203,62 @@ while act !=4: #Loop when act does not equal to 4
                             if sel in wares:
                                 info(sel) #display info of product
                                 while act == 2: # while act is 2
-                                    if quan[sel] == 0:
+                                    if quan[sel] == 0: 
+                                    #^^^ if the selected item has no stock
                                         print("Sorry! This item is out of stock")
-                                        break
+                                        break #end loop, ask again
                                     else:
                                         skip= input("Would you like to purchase this option? [Y/N] ").capitalize()
+                                        #ask user if they want to buy selecetd item
                                         if skip == "Y": # If yes
                                             buy(skip,sel) #call buy function
-                                            act = 1
-                                            break
+                                            stockstat(sel)
+                                            act = 1 # transfer to Buy
+                                            break # end loop and ^^
                                         elif skip == "N": #if not
-                                            break
-                                        else:
-                                            what()
+                                            break #end loop
+                                        else: #Invalid input
+                                            what(2)
                             else:
-                                print("Invalid input")
+                                what(2)
                                 continue
                             while ndesc != "N":
                                 ndesc = input("Would you like to examine another item? [Y/N] ").capitalize()
                                 if ndesc == "Y": #if yes
-                                    skip=" "
-                                    display()
+                                    skip=" " # set variable to blank
+                                    display() # Print display
                                     sel= input("What else would you like to examine? ").capitalize()
+                                    #^^^ Ask user if they want to see another item
                                     if sel in wares:    
                                         info(sel) #call info function
                                         break
                                     else:
-                                        what()
+                                        what(1)
                                 elif ndesc == "N": #if not
                                     display() #prints vending machine display
-                                    break
+                                    break # return to main menu
                                 else: #if other option
-                                    what()
-                            break
+                                    what(1)
+                            break # return menu
                         else: #any other input
-                            what()                            
+                            what(1)                            
                     elif act == 3: #User chooses to check Inventory
                         for x, y in inv.items():
                             print(f"{x} x{y}")
                     elif act == 4: #User chooses to leave machine
                         print("Have a good day!")
                         print("-You walk away from the machine-")
-                        break
+                        break #end program
                     elif act == "":
-                        continue
+                        continue #prevents else from triggering
                     else: #Users inputs something outside of selection
-                        what()
-                except ValueError:
-                    what()
+                        what(1)
+                except ValueError: # choice outside of selected
+                    what(1)
         elif act == "N": #If user chooses no
             print("-You decided to walk away from the machine-")
             break
         else: #If user inputs anything else
-            what()
+            what(1)
     except ValueError():#For when user encounters an error
-        what()
+        what(1)
