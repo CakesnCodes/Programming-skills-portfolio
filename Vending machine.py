@@ -113,7 +113,6 @@ def buy(skip,sel): #For buying products
             except ValueError: #if the code fails, print following
                 what(2) 
 	    stockstat(sel)    
-            return sel
     except ValueError: #ditto ^
         what(2)
 
