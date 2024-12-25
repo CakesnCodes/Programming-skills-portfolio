@@ -42,7 +42,7 @@ desc are descriptions
 
 quan are Quantities/stocks of products
 
-status are for showing stock atatus
+status are for showing stock status
 
 All the products (except water) are fictional
 """
@@ -112,6 +112,7 @@ def buy(skip,sel): #For buying products
                                 what(1)                                                  
             except ValueError: #if the code fails, print following
                 what(2) 
+	    stockstat(sel)    
             return sel
     except ValueError: #ditto ^
         what(2)
@@ -184,7 +185,6 @@ while act !=4: #Loop when act does not equal to 4
                     if act == 1: #User chooses to purchase
                         if act != 'Y': #when transfering from act 2 
                             buy("N","") #Call buy function
-                            stockstat(sel)
                         while True:
                             add = input("Would you like to purchase another product? [Y/N] ").capitalize()
                             #^^^ requests user if they want to buy another item
