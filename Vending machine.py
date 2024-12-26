@@ -106,13 +106,13 @@ def buy(skip,sel): #For buying products
                                 else: #if not
                                     quan[sel] -= amt #Subtract amount purchased from stock
                                     change (amt,sel,money) #Call change function
-                                    cont = False #set 'cont' to false
+                                    stockstat(sel) #Call Stock status function
+				    cont = False #set 'cont' to false
                                     break #end loop
                             except ValueError:
                                 what(1)                                                  
             except ValueError: #if the code fails, print following
-                what(2) 
-	    stockstat(sel)    
+                what(2)  
     except ValueError: #ditto ^
         what(2)
 
@@ -211,7 +211,6 @@ while act !=4: #Loop when act does not equal to 4
                                         #ask user if they want to buy selecetd item
                                         if skip == "Y": # If yes
                                             buy(skip,sel) #call buy function
-                                            stockstat(sel)
                                             act = 1 # transfer to Buy
                                             break # end loop and ^^
                                         elif skip == "N": #if not
