@@ -42,7 +42,7 @@ desc are descriptions
 
 quan are Quantities/stocks of products
 
-status are for showing stock status
+status are for showing stock atatus
 
 All the products (except water) are fictional
 """
@@ -106,13 +106,13 @@ def buy(skip,sel): #For buying products
                                 else: #if not
                                     quan[sel] -= amt #Subtract amount purchased from stock
                                     change (amt,sel,money) #Call change function
-                                    stockstat(sel) #Call Stock status function
-				    cont = False #set 'cont' to false
+                                    stockstat(sel)
+                                    cont = False #set 'cont' to false
                                     break #end loop
                             except ValueError:
                                 what(1)                                                  
             except ValueError: #if the code fails, print following
-                what(2)  
+                what(2) 
     except ValueError: #ditto ^
         what(2)
 
