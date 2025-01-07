@@ -11,11 +11,11 @@ price = {"A1":5.50,"A2":3.20,"A3":1.50,
          "D1":3.50,"D2":3.50,"D3":4.50,}
 
 desc = {"A1":"Cookies with runes inscribed to them",
-		"A2":"Lightly Salted Potato chips",
-		"A3":"Hexagonal hardware fasteners covered in honey, Dubiously Edible",
+	"A2":"Lightly Salted Potato chips",
+	"A3":"Hexagonal hardware fasteners covered in honey, Dubiously Edible",
         "B1":"Corn curls with cheese dusting",
-		"B2":"Biscuits with chocolate insides, and creatures printed on the outside",
-		"B3":"Paw-shaped gummies of assorted flavors",
+	"B2":"Biscuits with chocolate insides, and creatures printed on the outside",
+	"B3":"Paw-shaped gummies of assorted flavors",
         "C1":"Just your average bottle of water",
         "C2":"Raspberry-flavored Cola [A taste that's out of this world]",
         "C3":"Lemon-Lime soda [Something to float your boat]",
@@ -42,7 +42,7 @@ desc are descriptions
 
 quan are Quantities/stocks of products
 
-status are for showing stock atatus
+status are for showing stock status
 
 All the products (except water) are fictional
 """
@@ -106,7 +106,7 @@ def buy(skip,sel): #For buying products
                                 else: #if not
                                     quan[sel] -= amt #Subtract amount purchased from stock
                                     change (amt,sel,money) #Call change function
-                                    stockstat(sel)
+                                    stockstat(sel) #Change stock status
                                     cont = False #set 'cont' to false
                                     break #end loop
                             except ValueError:
